@@ -96,19 +96,19 @@
                 android:id="@+id/b1"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:text="1" />
+                android:text="a" />
 
             <Button
                 android:id="@+id/b2"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:text="2" />
+                android:text="b" />
 
             <Button
                 android:id="@+id/b3"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:text="3" />
+                android:text="c" />
 
         </TableRow>
 
@@ -120,19 +120,19 @@
                 android:id="@+id/b4"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:text="4" />
+                android:text="d" />
 
             <Button
                 android:id="@+id/b5"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:text="5" />
+                android:text="e" />
 
             <Button
                 android:id="@+id/b6"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:text="6" />
+                android:text="f" />
 
         </TableRow>
 
@@ -144,19 +144,19 @@
                 android:id="@+id/b7"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:text="7" />
+                android:text="g" />
 
             <Button
                 android:id="@+id/b8"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:text="8" />
+                android:text="h" />
 
             <Button
                 android:id="@+id/b9"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:text="9" />
+                android:text="i" />
 
         </TableRow>
 

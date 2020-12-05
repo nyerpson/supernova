@@ -2,6 +2,7 @@ package com.example.ss_supernova_final;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -85,7 +86,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         // Initialize Game
         level = 1;
         // get extras bundles for things like the section title
-        //flashSequence(generateSequence(level));
+        flashSequence(generateSequence(level));
     }
 
     public int[] generateSequence(int level) {
@@ -128,10 +129,16 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
 
     public void flashSequence(int[] s) {
         for(int i = 0; i < s.length; i++) {
-            if(s[i]==1) {
-            }
+            if (s[i] == 1) { b1.setText("" + (i + 1)); b1.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary)); }
+            if (s[i] == 2) { b2.setText("" + (i + 1)); b2.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary)); }
+            if (s[i] == 3) { b3.setText("" + (i + 1)); b3.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary)); }
+            if (s[i] == 4) { b4.setText("" + (i + 1)); b4.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary)); }
+            if (s[i] == 5) { b5.setText("" + (i + 1)); b5.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary)); }
+            if (s[i] == 6) { b6.setText("" + (i + 1)); b6.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary)); }
+            if (s[i] == 7) { b7.setText("" + (i + 1)); b7.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary)); }
+            if (s[i] == 8) { b8.setText("" + (i + 1)); b8.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary)); }
+            if (s[i] == 9) { b9.setText("" + (i + 1)); b9.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary)); }
         }
-
     }
 
     public void onGameButtonClick() {
