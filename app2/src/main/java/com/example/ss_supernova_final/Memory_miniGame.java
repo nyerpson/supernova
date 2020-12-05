@@ -43,6 +43,9 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
     Paint health_color;
     Paint level_color;
 
+    // Other
+    int level;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +81,63 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
 
         SurfaceView surface = findViewById(R.id.surfaceView);
         surface.getHolder().addCallback(this);
+
+        // Initialize Game
+        level = 1;
+        // get extras bundles for things like the section title
+        //flashSequence(generateSequence(level));
+    }
+
+    public int[] generateSequence(int level) {
+        /* Steps
+        1. choose a numbered sequence of randomized(?) squares
+            - create arrays of different orders?
+            - randomize, or have a few sets pre-made?
+            - need different length sequences to choose from for each "level"
+            - allow for pressing certain keys multiple times? Or just every button can only be pressed once?
+        2. flash said sequence for a few seconds for the player to memorize
+            - momentarily change the color/number of the button, then revert?
+            - need to count time (pause timer while flashing?)
+        3. keep track of player input to determine if the sequence was correct
+            - gray out already-pushed buttons, or not?
+            a. if the player gets the sequence wrong, reset to step 2
+            b. if the player gets the sequence right, repeat from step 1 with a more difficult sequence
+
+        FIRST RUN:
+        - No double dipping, but don't gray out buttons after being pressed
+            - idk how to do a Simon Says type thing, so I'll do just a static color/number change for now
+        - Art buttons will have no numbers; all will either be exactly uniform without identification or all sorts of different colored buttons, but no numbers
+         */
+
+        // STEP 1 : CHOOSE/CREATE NUMBERED SEQUENCE
+
+        // first run: set sequences, one for each level; just level 1 for now
+        if(level==1) {
+            int[] lvlonesequence1 = {3, 5, 7, 2, 4};
+            return lvlonesequence1;
+        }
+        else if(level==2) {
+
+        }
+        else if(level==3) {
+
+        }
+
+        return null;
+    }
+
+    public void flashSequence(int[] s) {
+        for(int i = 0; i < s.length; i++) {
+            if(s[i]==1) {
+            }
+        }
+
+    }
+
+    public void onGameButtonClick() {
+        // STEP 3: TRACK PLAYER SEQUENCE INPUT
+
+
     }
 
     public void draw() {
@@ -100,6 +160,10 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
     public void update(int width, int height) {
         // Music Updates
         //checkAmbiance();
+
+        // check win condition?
+        // check level stage?
+
     }
 
     //successfully complete, return to map
