@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -41,11 +42,17 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
     Button b9;
 
     // SurfaceView Elements
-    Paint health_color;
     Paint level_color;
 
     // Other
     int level;
+    boolean levelComplete;
+    int clickCount;
+    Button[] playerSequence;
+    Button[] gameSequence;
+    Button[] buttonList;
+    int[] buttonIdList;
+    Animator animator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,23 +81,28 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         b7 = findViewById(R.id.b7);
         b8 = findViewById(R.id.b8);
         b9 = findViewById(R.id.b9);
+        buttonList = new Button[] {b1, b2, b3, b4, b5, b6, b7, b8, b9};
+        buttonIdList = new int[] {R.id.b1, R.id.b2, R.id.b3, R.id.b4, R.id.b5, R.id.b6, R.id.b7, R.id.b8, R.id.b9};
 
-        health_color = new Paint();
-        health_color.setColor(Color.RED);
         level_color = new Paint();
         level_color.setColor(Color.WHITE);
 
         SurfaceView surface = findViewById(R.id.surfaceView);
         surface.getHolder().addCallback(this);
 
+        animator = new Animator(this);
+        animator.start();
+
         // Initialize Game
         level = 1;
+        levelComplete = false;
         // get extras bundles for things like the section title
         flashSequence(generateSequence(level));
+        clickCount = 0;     // counter for which button in the sequence we're in
     }
 
-    public int[] generateSequence(int level) {
-        /* Steps
+    /* Steps
+        0. Show a popup with a button for READY? to give players a second to recognize the game? A countdown? A button to start the level?
         1. choose a numbered sequence of randomized(?) squares
             - create arrays of different orders?
             - randomize, or have a few sets pre-made?
@@ -110,39 +122,86 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         - Art buttons will have no numbers; all will either be exactly uniform without identification or all sorts of different colored buttons, but no numbers
          */
 
+    public Button[] generateSequence(int level) {
         // STEP 1 : CHOOSE/CREATE NUMBERED SEQUENCE
+
+        // Remove all tints
+        for(int i = 0; i < buttonList.length; i++) {
+            buttonList[i].setBackgroundTintList(null);
+            buttonList[i].setText("");
+        }
 
         // first run: set sequences, one for each level; just level 1 for now
         if(level==1) {
-            int[] lvlonesequence1 = {3, 5, 7, 2, 4};
-            return lvlonesequence1;
+            gameSequence = new Button[] {b3, b5, b7, b2, b4};
+            playerSequence = new Button[5];
         }
         else if(level==2) {
-
+            gameSequence = new Button[] {b2, b6, b4, b7, b9, b1, b5};
+            playerSequence = new Button[7];
         }
         else if(level==3) {
-
+            gameSequence = new Button[] {b8, b3, b5, b7, b1, b2, b4, b6, b9};
+            playerSequence = new Button[9];
         }
-
-        return null;
+        return gameSequence;
+        // bSequence shows the order (in indices) and button to press (in int)
     }
 
-    public void flashSequence(int[] s) {
+    public void flashSequence(Button[] s) {
         for(int i = 0; i < s.length; i++) {
-            if (s[i] == 1) { b1.setText("" + (i + 1)); b1.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary)); }
-            if (s[i] == 2) { b2.setText("" + (i + 1)); b2.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary)); }
-            if (s[i] == 3) { b3.setText("" + (i + 1)); b3.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary)); }
-            if (s[i] == 4) { b4.setText("" + (i + 1)); b4.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary)); }
-            if (s[i] == 5) { b5.setText("" + (i + 1)); b5.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary)); }
-            if (s[i] == 6) { b6.setText("" + (i + 1)); b6.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary)); }
-            if (s[i] == 7) { b7.setText("" + (i + 1)); b7.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary)); }
-            if (s[i] == 8) { b8.setText("" + (i + 1)); b8.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary)); }
-            if (s[i] == 9) { b9.setText("" + (i + 1)); b9.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary)); }
+            for(int j = 0; j < buttonList.length; j++) {
+                if (s[i] == buttonList[j]) {
+                    buttonList[j].setText(""+(i+1));
+                    buttonList[j].setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary));
+                }
+            }
         }
+
+        new CountDownTimer(gameSequence.length * 500, gameSequence.length * 500 / gameSequence.length) {
+            public void onTick(long millisUntilFinished) {
+                //mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+                // alt: wait a few seconds between doing each tint for a delayed effect?
+            }
+            public void onFinish() {
+                for(int i = 0; i < buttonList.length; i++) {
+                    buttonList[i].setBackgroundTintList(null);
+                    buttonList[i].setText("");
+                }
+            }
+        }.start();
     }
 
-    public void onGameButtonClick() {
+    public void onGameButtonClick(View view) {
         // STEP 3: TRACK PLAYER SEQUENCE INPUT
+
+
+        // FIRST: ADD BUTTON PRESSED TO NEW ARRAY
+        for(int i = 0; i < buttonList.length; i++) {
+            if(buttonIdList[i]==view.getId()) {     // 1. Iterate through list of button Ids to get which one was pressed
+                playerSequence[clickCount] = buttonList[i];     // 2. Add pressed button to player sequence array
+                buttonList[i].setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimaryDark));   // DEBUG: Feedback that the right button was pressed
+                clickCount++;   // Increment click count for adding new array elements
+            }
+        }
+        // SECOND: CHECK THAT BOTH ARRAYS ARE THE SAME
+        for(int i = 0; i < clickCount; i++) {
+            if(playerSequence[i]!=gameSequence[i]) {    // if the two arrays are different
+                for(int j = 0; j < playerSequence.length; j++) {
+                    //playerSequence[j].setBackgroundTintList(null);  // get rid of any other tints (crashes)
+                    playerSequence[j] = null;   // empty array to start over
+                    gameSequence[j].setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary));   // reset all hint tints
+                }
+                clickCount = 0; // start over the clickCount
+            }
+
+        }
+
+
+
+        //      Third: Compare the array with the sequence (make sure to only go as far as the number clicked; it will go false if it compares the whole thing)
+        //      Fourth: If the same, continue; if not, start over by emptying the array and starting from the beginning of the sequence, undoing any changes
+        // Create new array with pushed buttons, compare them after each click
 
 
     }
@@ -153,14 +212,17 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         Canvas c = holder.lockCanvas();
         update(c.getWidth(), c.getHeight());
         c.drawColor(Color.BLACK);
+
+        // If Sequence Complete:
+        if(level==1 && clickCount==5) {
+            level_color.setColor(Color.GREEN); 
+
+        }
+
         // Level Indicators
         c.drawCircle(374, 85, 30, level_color);
         c.drawCircle(487, 85, 30, level_color);
         c.drawCircle(600, 85, 30, level_color);
-        // Health Bar
-        c.drawCircle(324, 1095, 50, health_color);
-        c.drawCircle(487, 1095, 50, health_color);
-        c.drawCircle(650, 1095, 50, health_color);
         holder.unlockCanvasAndPost(c);
     }
 
