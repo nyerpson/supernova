@@ -4,17 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.Callback {
 
@@ -30,7 +33,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
 
     SurfaceHolder holder = null;
 
-    // Design Elements
+    // Game Elements
     Button b1;
     Button b2;
     Button b3;
@@ -40,18 +43,22 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
     Button b7;
     Button b8;
     Button b9;
-
-    // SurfaceView Elements
-    Paint level_color;
-
-    // Other
     int level;
     boolean levelComplete;
+    boolean gameComplete;
     int clickCount;
     Button[] playerSequence;
     Button[] gameSequence;
     Button[] buttonList;
     int[] buttonIdList;
+
+    // SurfaceView Elements
+    Paint level1_color;
+    Paint level2_color;
+    Paint level3_color;
+
+    // Other
+    Button bottomButton;
     Animator animator;
 
     @Override
@@ -83,9 +90,14 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         b9 = findViewById(R.id.b9);
         buttonList = new Button[] {b1, b2, b3, b4, b5, b6, b7, b8, b9};
         buttonIdList = new int[] {R.id.b1, R.id.b2, R.id.b3, R.id.b4, R.id.b5, R.id.b6, R.id.b7, R.id.b8, R.id.b9};
+        bottomButton = findViewById((R.id.bottomButton));
 
-        level_color = new Paint();
-        level_color.setColor(Color.WHITE);
+        level1_color = new Paint();
+        level1_color.setColor(Color.WHITE);
+        level2_color = new Paint();
+        level2_color.setColor(Color.WHITE);
+        level3_color = new Paint();
+        level3_color.setColor(Color.WHITE);
 
         SurfaceView surface = findViewById(R.id.surfaceView);
         surface.getHolder().addCallback(this);
@@ -96,9 +108,11 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         // Initialize Game
         level = 1;
         levelComplete = false;
-        // get extras bundles for things like the section title
-        flashSequence(generateSequence(level));
+        gameComplete = false;
         clickCount = 0;     // counter for which button in the sequence we're in
+        // get extras bundles for things like the section title
+        generateSequence(level);
+        flashSequence();
     }
 
     /* Steps
@@ -125,85 +139,145 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
     public Button[] generateSequence(int level) {
         // STEP 1 : CHOOSE/CREATE NUMBERED SEQUENCE
 
-        // Remove all tints
-        for(int i = 0; i < buttonList.length; i++) {
-            buttonList[i].setBackgroundTintList(null);
-            buttonList[i].setText("");
-        }
+        // Remove all button tints and text
+        buttonFunctions(1);
+        tickCount = 0;
 
-        // first run: set sequences, one for each level; just level 1 for now
+        // first run: set sequences, create randomized sequences in the future
         if(level==1) {
             gameSequence = new Button[] {b3, b5, b7, b2, b4};
+            //gameSequence = randomizeSequence(5);
             playerSequence = new Button[5];
         }
         else if(level==2) {
             gameSequence = new Button[] {b2, b6, b4, b7, b9, b1, b5};
+            //gameSequence = randomizeSequence(7);
             playerSequence = new Button[7];
         }
         else if(level==3) {
             gameSequence = new Button[] {b8, b3, b5, b7, b1, b2, b4, b6, b9};
+            //gameSequence = randomizeSequence(9);
             playerSequence = new Button[9];
         }
         return gameSequence;
-        // bSequence shows the order (in indices) and button to press (in int)
+        // gameSequence shows the order (in indices) and button to press (in elements)
     }
 
-    public void flashSequence(Button[] s) {
-        for(int i = 0; i < s.length; i++) {
-            for(int j = 0; j < buttonList.length; j++) {
-                if (s[i] == buttonList[j]) {
-                    buttonList[j].setText(""+(i+1));
-                    buttonList[j].setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary));
-                }
-            }
-        }
+    public Button[] randomizeSequence(int length) {
+         List<Button> tempList = Arrays.asList(buttonList);
+         Collections.shuffle(tempList);
+         Button[] shuffledArray = new Button[9];
+         tempList.toArray(shuffledArray);
 
-        new CountDownTimer(gameSequence.length * 500, gameSequence.length * 500 / gameSequence.length) {
+         Button[] newSequence = new Button[length];
+         for(int i = 0; i < length; i++) {
+             newSequence[i] = shuffledArray[i];
+         }
+         return newSequence;
+    }
+
+    int tickCount = 0;
+    public void flashSequence() {
+        // STEP 2: FLASH THE GENERATED SEQUENCE
+        buttonFunctions(3);     // disable clickability
+        buttonFunctions(1);     // reset all buttons
+        //
+
+
+        new CountDownTimer(gameSequence.length * 500, gameSequence.length * 500 / (gameSequence.length+2)) {
             public void onTick(long millisUntilFinished) {
-                //mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
-                // alt: wait a few seconds between doing each tint for a delayed effect?
+                //Toast.makeText(Memory_miniGame.this, "Tick Count: "+tickCount, Toast.LENGTH_SHORT).show();
+                if(tickCount==0) { tickCount++; }
+                else if(tickCount>0 && tickCount<=gameSequence.length) {
+                    gameSequence[tickCount-1].setText(""+tickCount);
+                    gameSequence[tickCount-1].setBackgroundTintList(ContextCompat.getColorStateList(Memory_miniGame.this, R.color.colorPrimary));
+                    tickCount++;
+                }
+                else { tickCount++; }
             }
             public void onFinish() {
-                for(int i = 0; i < buttonList.length; i++) {
-                    buttonList[i].setBackgroundTintList(null);
-                    buttonList[i].setText("");
-                }
+                buttonFunctions(1);
+                buttonFunctions(2);
+                tickCount = 0;
             }
         }.start();
     }
 
+    // NOTE: THERE'S A WEIRD DELAY BETWEEN THE SEQUENCE FADING AND THE BUTTONS ACTUALLY REGISTERING THE INPUT AND CHANGING COLOR
+    // NOTE: OKAY, NOT ACTUALLY A "DELAY" BUT IT WON'T COLOR/REGISTER THE FIRST PLAYER CLICK AND THEN GO ON AS NORMAL ON THE NEXT CLICK?
+
     public void onGameButtonClick(View view) {
         // STEP 3: TRACK PLAYER SEQUENCE INPUT
-
-
-        // FIRST: ADD BUTTON PRESSED TO NEW ARRAY
+        // FIRST: ADD BUTTON PRESSED TO PLAYER ARRAY
         for(int i = 0; i < buttonList.length; i++) {
-            if(buttonIdList[i]==view.getId()) {     // 1. Iterate through list of button Ids to get which one was pressed
-                playerSequence[clickCount] = buttonList[i];     // 2. Add pressed button to player sequence array
+            if(buttonIdList[i]==view.getId()) {                                                                                 // 1. Iterate through list of button Ids to get which one was pressed
+                playerSequence[clickCount] = buttonList[i];                                                                     // 2. Add pressed button to player sequence array
                 buttonList[i].setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimaryDark));   // DEBUG: Feedback that the right button was pressed
-                clickCount++;   // Increment click count for adding new array elements
+                clickCount++;                                                                                                   // 3. Increment click count for adding new array elements
             }
         }
         // SECOND: CHECK THAT BOTH ARRAYS ARE THE SAME
         for(int i = 0; i < clickCount; i++) {
-            if(playerSequence[i]!=gameSequence[i]) {    // if the two arrays are different
-                for(int j = 0; j < playerSequence.length; j++) {
-                    //playerSequence[j].setBackgroundTintList(null);  // get rid of any other tints (crashes)
-                    playerSequence[j] = null;   // empty array to start over
-                    gameSequence[j].setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimary));   // reset all hint tints
-                }
-                clickCount = 0; // start over the clickCount
+            if(playerSequence[i]!=gameSequence[i]) {
+                buttonFunctions(1);             // 1. Reset all button tints and text
+                buttonFunctions(4);             // 2. Reset the player sequence and clickCount
             }
-
         }
+        // THIRD: IF CLICK COUNT HAS REACHED THE ARRAY LENGTH, IT MEANS THE SEQUENCE WAS COMPLETED
+        if (gameSequence.length==clickCount) {
+            buttonFunctions(1);
+            clickCount = 0;
+            levelComplete = true;
+            if(level==1 && levelComplete) {
+                level1_color.setColor(Color.GREEN);
+                level++;
+                generateSequence(level);
+                flashSequence();
+                levelComplete = false;
+            }
+            if(level==2 && levelComplete) {
+                level2_color.setColor(Color.GREEN);
+                level++;
+                generateSequence(level);
+                flashSequence();
+                levelComplete = false;
+            }
+            if(level==3 && levelComplete) {
+                level3_color.setColor(Color.GREEN);
+                gameComplete = true;
+                bottomButton.setText("RETURN TO MAP");
+                // stop timer, victory feedback, etc.
+            }
+        }
+    }
 
-
-
-        //      Third: Compare the array with the sequence (make sure to only go as far as the number clicked; it will go false if it compares the whole thing)
-        //      Fourth: If the same, continue; if not, start over by emptying the array and starting from the beginning of the sequence, undoing any changes
-        // Create new array with pushed buttons, compare them after each click
-
-
+    public void buttonFunctions(int type) {
+        // Type = 1: reset all button tints and text
+        // Type = 2: set all buttons enabled
+        // Type = 3: set all buttons disabled
+        // Type = 4: reset player sequence + clickCount
+        if(type==1) {
+            for (int i = 0; i < buttonList.length; i++) {
+                buttonList[i].setBackgroundTintList(null);
+                buttonList[i].setText("");
+            }
+        }
+        if(type==2) {
+            for (int i = 0; i < buttonList.length; i++) {
+                buttonList[i].setClickable(true);
+            }
+        }
+        if(type==3) {
+            for (int i = 0; i < buttonList.length; i++) {
+                buttonList[i].setClickable(false);
+            }
+        }
+        if(type==4) {
+            for (int i = 0; i < playerSequence.length; i++) {
+                playerSequence[i] = null;
+                clickCount = 0;
+            }
+        }
     }
 
     public void draw() {
@@ -212,39 +286,22 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         Canvas c = holder.lockCanvas();
         update(c.getWidth(), c.getHeight());
         c.drawColor(Color.BLACK);
-
-        // If Sequence Complete:
-        if(level==1 && clickCount==5) {
-            level_color.setColor(Color.GREEN); 
-
-        }
-
         // Level Indicators
-        c.drawCircle(374, 85, 30, level_color);
-        c.drawCircle(487, 85, 30, level_color);
-        c.drawCircle(600, 85, 30, level_color);
+        c.drawCircle(374, 85, 30, level1_color);
+        c.drawCircle(487, 85, 30, level2_color);
+        c.drawCircle(600, 85, 30, level3_color);
         holder.unlockCanvasAndPost(c);
     }
 
     public void update(int width, int height) {
         // Music Updates
         //checkAmbiance();
-
-        // check win condition?
-        // check level stage?
-
     }
 
-    //successfully complete, return to map
-    public void finishSuccess(View view){
-        finish();
-    }
-
-    //fail, go to monster
-    public void fail(View view){
-        Intent my_intent=new Intent(getBaseContext(),Monster_encounter.class);
-        startActivity(my_intent);
-        // need to finish this activity somehow
+    //flash sequence again; if game complete, return to map
+    public void onBottomClick(View view){
+        if(!gameComplete) { flashSequence(); }      // NEED TO MAKE SURE YOU CAN ONLY FLASH SEQUENCE
+        else { finish(); }
     }
 
     @Override
