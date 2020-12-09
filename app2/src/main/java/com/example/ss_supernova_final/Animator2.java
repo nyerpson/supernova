@@ -1,11 +1,11 @@
 package com.example.ss_supernova_final;
 
-public class Animator extends Thread{
+public class Animator2 extends Thread{
 
     Monster_encounter surfaceActivity;
     boolean is_running = false;
 
-    public Animator(Monster_encounter activity){
+    public Animator2(Monster_encounter activity){
 
         surfaceActivity=activity;
 

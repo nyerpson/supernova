@@ -36,7 +36,7 @@ public class Monster_encounter extends AppCompatActivity implements SensorEventL
 
     SurfaceHolder holder = null;
 
-    Animator my_animator;
+    Animator2 my_animator;
 
     float timeRemaining;
 
@@ -72,7 +72,7 @@ public class Monster_encounter extends AppCompatActivity implements SensorEventL
         SurfaceView my_surface = findViewById(R.id.surfaceViewHe);
         my_surface.getHolder().addCallback(this);
 
-        my_animator=new Animator(this);
+        my_animator=new Animator2(this);
         my_animator.start();
 
         new CountDownTimer(20000, 1000) {
