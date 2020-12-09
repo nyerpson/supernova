@@ -156,13 +156,23 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
     }
 
     public Button[] randomizeSequence(int length) {
-        Button[] newSequence = new Button[length];
         Random rand = new Random();
+        // Create a copy of the buttonList array
+        Button[] tempSequence = new Button[buttonList.length];
+        for(int i = 0; i < buttonList.length; i++) {
+            tempSequence[i] = buttonList[i];
+        }
+        // Fisher-Yates Shuffle - shuffle the full button array
+        for(int i = tempSequence.length - 1; i > 0; i--) {
+            int j = rand.nextInt(i+1);
+            Button temp = tempSequence[i];
+            tempSequence[i] = tempSequence[j];
+            tempSequence[j] = temp;
+        }
+        // Then copy the shuffled values over to the new sequence, only up to the specified length
+        Button[] newSequence = new Button[length];
         for(int i = 0; i < length; i++) {
-            int swapIndex = rand.nextInt(buttonList.length);
-            Button temp = buttonList[swapIndex];
-            newSequence[i] = buttonList[swapIndex];
-            newSequence[i] = temp;
+            newSequence[i] = tempSequence[i];
         }
         return newSequence;
     }
