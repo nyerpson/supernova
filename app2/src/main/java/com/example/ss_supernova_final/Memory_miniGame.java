@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -21,7 +22,7 @@ import java.util.Random;
 
 public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.Callback {
 
-            /*
+    /*
     public void setMiniGameBundles(String gameId, int imageId, String titleText) {
         Intent intent = new Intent(getBaseContext(), gameId.class);
         //intent.putExtra("image", imageId);
@@ -66,7 +67,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memory_mini_game);
 
-        /*
+        /* // get extras bundles for things like the section title
         Bundle extras = getIntent().getExtras();
         if(extras!=null) {
             hintImage = findViewById(R.id.hintImage);
@@ -109,71 +110,61 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         level = 1;
         levelComplete = false;
         gameComplete = false;
-        clickCount = 0;     // counter for which button in the sequence we're in
-        // get extras bundles for things like the section title
+        clickCount = 0;
         generateSequence(level);
         flashSequence();
     }
 
     /* Steps
-        0. Show a popup with a button for READY? to give players a second to recognize the game? A countdown? A button to start the level?
-        1. choose a numbered sequence of randomized(?) squares
-            - create arrays of different orders?
-            - randomize, or have a few sets pre-made?
+        0. Show a popup with a button for READY? to give players a second to recognize the game? A countdown? A button to start the level? Start automatically?
+        1. Choose a numbered sequence of randomized squares
             - need different length sequences to choose from for each "level"
-            - allow for pressing certain keys multiple times? Or just every button can only be pressed once?
-        2. flash said sequence for a few seconds for the player to memorize
+            - allow for pressing certain keys multiple times? Every button can only be pressed once currently
+        2. Flash said sequence for a few seconds for the player to memorize
             - momentarily change the color/number of the button, then revert?
             - need to count time (pause timer while flashing?)
-        3. keep track of player input to determine if the sequence was correct
-            - gray out already-pushed buttons, or not?
-            a. if the player gets the sequence wrong, reset to step 2
+        3. Keep track of player input to determine if the sequence was correct
+            a. if the player gets the sequence wrong, reset; allow player to re-flash the sequence
             b. if the player gets the sequence right, repeat from step 1 with a more difficult sequence
 
         FIRST RUN:
         - No double dipping, but don't gray out buttons after being pressed
-            - idk how to do a Simon Says type thing, so I'll do just a static color/number change for now
         - Art buttons will have no numbers; all will either be exactly uniform without identification or all sorts of different colored buttons, but no numbers
          */
 
-    public Button[] generateSequence(int level) {
+    public void generateSequence(int level) {
         // STEP 1 : CHOOSE/CREATE NUMBERED SEQUENCE
-
-        // Remove all button tints and text
-        buttonFunctions(1);
+        buttonFunctions(1); // Remove all button tints and text
         tickCount = 0;
 
-        // first run: set sequences, create randomized sequences in the future
         if(level==1) {
-            gameSequence = new Button[] {b3, b5, b7, b2, b4};
-            //gameSequence = randomizeSequence(5);
+            //gameSequence = new Button[] {b9, b5, b7, b2, b4};
+            gameSequence = randomizeSequence(5);
             playerSequence = new Button[5];
         }
         else if(level==2) {
-            gameSequence = new Button[] {b2, b6, b4, b7, b9, b1, b5};
-            //gameSequence = randomizeSequence(7);
+            //gameSequence = new Button[] {b2, b6, b4, b7, b9, b1, b5};
+            gameSequence = randomizeSequence(7);
             playerSequence = new Button[7];
         }
         else if(level==3) {
-            gameSequence = new Button[] {b8, b3, b5, b7, b1, b2, b4, b6, b9};
-            //gameSequence = randomizeSequence(9);
+            //gameSequence = new Button[] {b8, b3, b5, b7, b1, b2, b4, b6, b9};
+            gameSequence = randomizeSequence(9);
             playerSequence = new Button[9];
         }
-        return gameSequence;
-        // gameSequence shows the order (in indices) and button to press (in elements)
+        // gameSequence shows the order (in indices) and button to press (the element at said index)
     }
 
     public Button[] randomizeSequence(int length) {
-         List<Button> tempList = Arrays.asList(buttonList);
-         Collections.shuffle(tempList);
-         Button[] shuffledArray = new Button[9];
-         tempList.toArray(shuffledArray);
-
-         Button[] newSequence = new Button[length];
-         for(int i = 0; i < length; i++) {
-             newSequence[i] = shuffledArray[i];
-         }
-         return newSequence;
+        Button[] newSequence = new Button[length];
+        Random rand = new Random();
+        for(int i = 0; i < length; i++) {
+            int swapIndex = rand.nextInt(buttonList.length);
+            Button temp = buttonList[swapIndex];
+            newSequence[i] = buttonList[swapIndex];
+            newSequence[i] = temp;
+        }
+        return newSequence;
     }
 
     int tickCount = 0;
@@ -181,8 +172,6 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         // STEP 2: FLASH THE GENERATED SEQUENCE
         buttonFunctions(3);     // disable clickability
         buttonFunctions(1);     // reset all buttons
-        //
-
 
         new CountDownTimer(gameSequence.length * 500, gameSequence.length * 500 / (gameSequence.length+2)) {
             public void onTick(long millisUntilFinished) {
@@ -203,9 +192,6 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         }.start();
     }
 
-    // NOTE: THERE'S A WEIRD DELAY BETWEEN THE SEQUENCE FADING AND THE BUTTONS ACTUALLY REGISTERING THE INPUT AND CHANGING COLOR
-    // NOTE: OKAY, NOT ACTUALLY A "DELAY" BUT IT WON'T COLOR/REGISTER THE FIRST PLAYER CLICK AND THEN GO ON AS NORMAL ON THE NEXT CLICK?
-
     public void onGameButtonClick(View view) {
         // STEP 3: TRACK PLAYER SEQUENCE INPUT
         // FIRST: ADD BUTTON PRESSED TO PLAYER ARRAY
@@ -219,6 +205,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         // SECOND: CHECK THAT BOTH ARRAYS ARE THE SAME
         for(int i = 0; i < clickCount; i++) {
             if(playerSequence[i]!=gameSequence[i]) {
+                Log.d("Example", "playerSequence: "+playerSequence[i].getId()+". gameSequence: "+gameSequence[i].getId());
                 buttonFunctions(1);             // 1. Reset all button tints and text
                 buttonFunctions(4);             // 2. Reset the player sequence and clickCount
             }
@@ -246,7 +233,8 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
                 level3_color.setColor(Color.GREEN);
                 gameComplete = true;
                 bottomButton.setText("RETURN TO MAP");
-                // stop timer, victory feedback, etc.
+                buttonFunctions(3);     // disable clickability
+                // stop timer, victory feedback (change button color/image?), etc.
             }
         }
     }
@@ -282,7 +270,6 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
 
     public void draw() {
         if(holder==null) return;
-
         Canvas c = holder.lockCanvas();
         update(c.getWidth(), c.getHeight());
         c.drawColor(Color.BLACK);
