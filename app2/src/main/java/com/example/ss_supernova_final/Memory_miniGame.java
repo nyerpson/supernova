@@ -32,8 +32,6 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
     }
      */
 
-    SurfaceHolder holder = null;
-
     // Game Elements
     Button b1;
     Button b2;
@@ -61,6 +59,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
     // Other
     Button bottomButton;
     Animator animator;
+    SurfaceHolder holder = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,17 +137,14 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         tickCount = 0;
 
         if(level==1) {
-            //gameSequence = new Button[] {b9, b5, b7, b2, b4};
             gameSequence = randomizeSequence(5);
             playerSequence = new Button[5];
         }
         else if(level==2) {
-            //gameSequence = new Button[] {b2, b6, b4, b7, b9, b1, b5};
             gameSequence = randomizeSequence(7);
             playerSequence = new Button[7];
         }
         else if(level==3) {
-            //gameSequence = new Button[] {b8, b3, b5, b7, b1, b2, b4, b6, b9};
             gameSequence = randomizeSequence(9);
             playerSequence = new Button[9];
         }
@@ -180,8 +176,9 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
     int tickCount = 0;
     public void flashSequence() {
         // STEP 2: FLASH THE GENERATED SEQUENCE
-        buttonFunctions(3);     // disable clickability
-        buttonFunctions(1);     // reset all buttons
+        bottomButton.setEnabled(false);      // disable flash button
+        buttonFunctions(3);             // disable game button click-ability
+        buttonFunctions(1);             // reset all buttons
 
         new CountDownTimer(gameSequence.length * 500, gameSequence.length * 500 / (gameSequence.length+2)) {
             public void onTick(long millisUntilFinished) {
@@ -197,6 +194,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
             public void onFinish() {
                 buttonFunctions(1);
                 buttonFunctions(2);
+                bottomButton.setEnabled(true);    // enable flash button
                 tickCount = 0;
             }
         }.start();
@@ -214,8 +212,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         }
         // SECOND: CHECK THAT BOTH ARRAYS ARE THE SAME
         for(int i = 0; i < clickCount; i++) {
-            if(playerSequence[i]!=gameSequence[i]) {
-                Log.d("Example", "playerSequence: "+playerSequence[i].getId()+". gameSequence: "+gameSequence[i].getId());
+            if(playerSequence[i]!=gameSequence[i]) {  // If the sequences differ:
                 buttonFunctions(1);             // 1. Reset all button tints and text
                 buttonFunctions(4);             // 2. Reset the player sequence and clickCount
             }
@@ -243,10 +240,16 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
                 level3_color.setColor(Color.GREEN);
                 gameComplete = true;
                 bottomButton.setText("RETURN TO MAP");
-                buttonFunctions(3);     // disable clickability
+                buttonFunctions(3);     // disable click-ability
                 // stop timer, victory feedback (change button color/image?), etc.
             }
         }
+    }
+
+    //flash sequence again; if game complete, return to map
+    public void onBottomClick(View view){
+        if(!gameComplete) { flashSequence(); }
+        else { finish(); }
     }
 
     public void buttonFunctions(int type) {
@@ -295,23 +298,15 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         //checkAmbiance();
     }
 
-    //flash sequence again; if game complete, return to map
-    public void onBottomClick(View view){
-        if(!gameComplete) { flashSequence(); }      // NEED TO MAKE SURE YOU CAN ONLY FLASH SEQUENCE
-        else { finish(); }
-    }
-
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
         holder = surfaceHolder;
         draw();
     }
-
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
         holder = surfaceHolder;
     }
-
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
         holder = null;
