@@ -58,7 +58,6 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
 
     // Other
     Button bottomButton;
-    Animator animator;
     SurfaceHolder holder = null;
 
     @Override
@@ -102,8 +101,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         SurfaceView surface = findViewById(R.id.surfaceView);
         surface.getHolder().addCallback(this);
 
-        animator = new Animator(this);
-        animator.start();
+        draw();
 
         // Initialize Game
         level = 1;
@@ -224,6 +222,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
             levelComplete = true;
             if(level==1 && levelComplete) {
                 level1_color.setColor(Color.GREEN);
+                draw();
                 level++;
                 generateSequence(level);
                 flashSequence();
@@ -231,6 +230,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
             }
             if(level==2 && levelComplete) {
                 level2_color.setColor(Color.GREEN);
+                draw();
                 level++;
                 generateSequence(level);
                 flashSequence();
@@ -238,6 +238,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
             }
             if(level==3 && levelComplete) {
                 level3_color.setColor(Color.GREEN);
+                draw();
                 gameComplete = true;
                 bottomButton.setText("RETURN TO MAP");
                 buttonFunctions(3);     // disable click-ability
@@ -284,18 +285,12 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
     public void draw() {
         if(holder==null) return;
         Canvas c = holder.lockCanvas();
-        update(c.getWidth(), c.getHeight());
         c.drawColor(Color.BLACK);
         // Level Indicators
         c.drawCircle(374, 85, 30, level1_color);
         c.drawCircle(487, 85, 30, level2_color);
         c.drawCircle(600, 85, 30, level3_color);
         holder.unlockCanvasAndPost(c);
-    }
-
-    public void update(int width, int height) {
-        // Music Updates
-        //checkAmbiance();
     }
 
     @Override
