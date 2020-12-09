@@ -35,7 +35,7 @@
         android:id="@+id/timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="TIME REMAINING: 60"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,35 +43,21 @@
         app:layout_constraintTop_toBottomOf="@+id/surfaceView" />
 
     <Button
-        android:id="@+id/bwin"
-        android:layout_width="wrap_content"
+        android:id="@+id/bottomButton"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:onClick="finishSuccess"
-        android:text="success"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="10dp"
+        android:onClick="onBottomClick"
+        android:text="FLASH SEQUENCE"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.154"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/bfail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:onClick="fail"
-        android:text="fail"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.842"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timer" />
 
     <SurfaceView
         android:id="@+id/surfaceView"
         android:layout_width="0dp"
-        android:layout_height="450dp"
+        android:layout_height="420dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
@@ -82,6 +68,7 @@
     <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/surfaceView"
         app:layout_constraintEnd_toEndOf="@+id/surfaceView"
@@ -96,19 +83,22 @@
                 android:id="@+id/b1"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:text="1" />
+                android:onClick="onGameButtonClick"
+                android:text="a" />
 
             <Button
                 android:id="@+id/b2"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:text="2" />
+                android:onClick="onGameButtonClick"
+                android:text="b" />
 
             <Button
                 android:id="@+id/b3"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:text="3" />
+                android:onClick="onGameButtonClick"
+                android:text="c" />
 
         </TableRow>
 
@@ -120,19 +110,22 @@
                 android:id="@+id/b4"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:text="4" />
+                android:onClick="onGameButtonClick"
+                android:text="d" />
 
             <Button
                 android:id="@+id/b5"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:text="5" />
+                android:onClick="onGameButtonClick"
+                android:text="e" />
 
             <Button
                 android:id="@+id/b6"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:text="6" />
+                android:onClick="onGameButtonClick"
+                android:text="f" />
 
         </TableRow>
 
@@ -144,19 +137,23 @@
                 android:id="@+id/b7"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:text="7" />
+                android:onClick="onGameButtonClick"
+                android:text="g" />
 
             <Button
                 android:id="@+id/b8"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:text="8" />
+                android:onClick="onGameButtonClick"
+                android:text="h" />
 
             <Button
                 android:id="@+id/b9"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:text="9" />
+
+                android:onClick="onGameButtonClick"
+                android:text="i" />
 
         </TableRow>
 
