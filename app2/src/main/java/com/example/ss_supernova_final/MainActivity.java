@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onStartGamePressed(View view){
-        Intent my_intent=new Intent(getBaseContext(),Wires_miniGame.class);
+        Intent my_intent=new Intent(getBaseContext(),Map.class);
         startActivity(my_intent);
     }
 

@@ -57,7 +57,7 @@
         android:layout_marginTop="77dp"
         android:layout_marginEnd="73dp"
         android:background="#00FFFFFF"
-        android:onClick="randomizeMinigame"
+        android:onClick="goToWires"
         android:text="Communications"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

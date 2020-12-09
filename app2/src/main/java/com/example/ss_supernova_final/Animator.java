@@ -2,12 +2,12 @@ package com.example.ss_supernova_final;
 
 public class Animator extends Thread{
 
-    /*Wires_miniGame LineView;
+    Monster_encounter surfaceActivity;
     boolean is_running = false;
 
-    public Animator(Wires_miniGame activity){
+    public Animator(Monster_encounter activity){
 
-        LineView=activity;
+        surfaceActivity=activity;
 
     }
 
@@ -17,7 +17,7 @@ public class Animator extends Thread{
 
         while(is_running){
 
-            LineView.draw();
+           surfaceActivity.draw();
 
             try{
                 sleep(50);
@@ -34,5 +34,5 @@ public class Animator extends Thread{
     }
 
 
-     */
+
 }

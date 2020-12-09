@@ -62,6 +62,8 @@ public class Wires_miniGame extends AppCompatActivity{
         image2 = (ImageView) findViewById(R.id.image2);
         image3 = (ImageView) findViewById(R.id.image3);
 
+
+
         image.setOnTouchListener(onTouchListener());
         image2.setOnTouchListener(onTouchListener());
         image3.setOnTouchListener(onTouchListener());
@@ -94,6 +96,10 @@ public class Wires_miniGame extends AppCompatActivity{
                 final int x = (int) event.getRawX();
                 final int y = (int) event.getRawY();
 
+                //int xbthree = image3.getLeft();
+                int ybthree = image3.getTop();
+                int ybtwo = image2.getTop();
+                int ybone = image.getTop();
 
 
                 ///return false;
@@ -128,10 +134,17 @@ public class Wires_miniGame extends AppCompatActivity{
 
 
 
-                                }else if (y>1000&&view==image3){
+                        }else if (y>1000&&view==image3) {
                             Toast.makeText(Wires_miniGame.this,
                                     "You moved battery 3 correctly!", Toast.LENGTH_SHORT)
                                     .show();
+                        }
+
+                        if(ybthree>1000&&ybtwo>1000&&ybone>1000){
+                            //Toast.makeText(Wires_miniGame.this,
+                                    //"Winstate", Toast.LENGTH_LONG)
+                                    //.show();
+                                    finish();
                         }
                         break;
 
