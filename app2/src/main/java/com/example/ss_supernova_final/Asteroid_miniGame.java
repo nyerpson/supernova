@@ -111,7 +111,7 @@ public class Asteroid_miniGame extends AppCompatActivity implements SensorEventL
             asteroid_y_position=i1;
         }
 
-
+        //FAIL -- GO TO MONSTER ENCOUNTER
         if(Math.abs(player_x_position-asteroid_x_position)<85 && Math.abs(player_y_position-asteroid_y_position)<120 ) {
             //go to monster;
             Intent my_intent=new Intent(getBaseContext(),Monster_encounter.class);
@@ -174,15 +174,18 @@ public class Asteroid_miniGame extends AppCompatActivity implements SensorEventL
 
         super.onDestroy();
     }
-
+    /*
     public void fail(View view){
         //go to monster
         Intent my_intent=new Intent(getBaseContext(),Monster_encounter.class);
         startActivity(my_intent);
     }
+     */
 
+    //player avoids asteroids for 20 seconds = success
     public void finishSuccess(View view){
         //return to map
+        //NOT FUNCTIONAL RIGHT NOW -- CHANGE TO WORK WITH TIMER
         if(timer<1){
             //add global minigame score +1
             finish();
