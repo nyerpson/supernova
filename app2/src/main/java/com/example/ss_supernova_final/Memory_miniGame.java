@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -14,6 +15,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -110,6 +112,28 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         clickCount = 0;
         generateSequence(level);
         flashSequence();
+
+        new CountDownTimer(40000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+
+                TextView mTextField =findViewById(R.id.timer);
+
+                mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+                //here you can have your logic to set text to edittext
+            }
+
+            //losing conditions
+            public void onFinish() {
+
+                //idk if this will crash the program lol
+                finish();
+                Intent my_intent=new Intent(getBaseContext(),Monster_encounter.class);
+                startActivity(my_intent);
+
+            }
+
+        }.start();
     }
 
     /* Steps
@@ -241,7 +265,11 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
                 draw();
                 gameComplete = true;
                 bottomButton.setText("RETURN TO MAP");
-                buttonFunctions(3);     // disable click-ability
+                buttonFunctions(3);
+
+                GlobalVariables.winState += 1;
+                finish();
+                // disable click-ability
                 // stop timer, victory feedback (change button color/image?), etc.
             }
         }
@@ -290,6 +318,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         c.drawCircle(374, 85, 30, level1_color);
         c.drawCircle(487, 85, 30, level2_color);
         c.drawCircle(600, 85, 30, level3_color);
+
         holder.unlockCanvasAndPost(c);
     }
 

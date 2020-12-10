@@ -16,6 +16,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -30,7 +31,6 @@ public class Monster_encounter extends AppCompatActivity implements SensorEventL
 
     Bitmap monster;
 
-
     Paint scoreText;
     Paint styleText;
 
@@ -39,9 +39,6 @@ public class Monster_encounter extends AppCompatActivity implements SensorEventL
     Animator2 my_animator;
 
     float timeRemaining;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,20 +75,15 @@ public class Monster_encounter extends AppCompatActivity implements SensorEventL
         new CountDownTimer(20000, 1000) {
 
             public void onTick(long millisUntilFinished) {
-
                 timeRemaining = millisUntilFinished / 1000;
-                //mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
-                //here you can have your logic to set text to edittext
             }
 
+            //winstate
             public void onFinish() {
-
                 finish();
-                //mTextField.setText("done!");
             }
 
         }.start();
-
     }
 
     @Override
@@ -107,8 +99,6 @@ public class Monster_encounter extends AppCompatActivity implements SensorEventL
 
     }
 
-    //String youWin = "Collect 5 Hearts!";
-
     float acc_x = 0;
     float acc_y = 0;
     float acc_z = 0;
@@ -123,9 +113,6 @@ public class Monster_encounter extends AppCompatActivity implements SensorEventL
     //cloud 2
     int cloud2_x_position=700;
     int cloud2_y_position=0;
-
-
-
 
 
     //where game events happen
@@ -165,8 +152,6 @@ public class Monster_encounter extends AppCompatActivity implements SensorEventL
             randomItem = myIntArray[(int) Math.floor(Math.random()*myIntArray.length)];
             cloud2_x_position=randomItem;
 
-
-
         }
 
         //losing conditions
@@ -175,28 +160,25 @@ public class Monster_encounter extends AppCompatActivity implements SensorEventL
             cloud_y_position=0;
             cloud2_y_position=0;
             GlobalVariables.playerHealth-=1;
+            Log.d("Notes", "ended program" + GlobalVariables.playerHealth);
             finish();
-            if(GlobalVariables.playerHealth==1){}
-
 
         } else if(Math.abs(pegasus_y_position-cloud2_y_position)<700 && Math.abs(pegasus_x_position-cloud2_x_position)<100) {
 
             cloud2_y_position=0;
             cloud_y_position=0;
             GlobalVariables.playerHealth-=1;
+            Log.d("Notes", "ended program2" + GlobalVariables.playerHealth);
             finish();
-            if(GlobalVariables.playerHealth==1){}
+
 
         }
 
         if(GlobalVariables.playerHealth==0){
-            //boolean gameover = true
+            GlobalVariables.gameOver = true;
             //ripple effect into the othr activities by closing them all and opening gameover activity when reach menu
 
         }
-
-
-
 
     }
 

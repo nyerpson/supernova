@@ -1,10 +1,14 @@
 package com.example.ss_supernova_final;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class Map extends AppCompatActivity {
 
@@ -12,10 +16,38 @@ public class Map extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(GlobalVariables.winState==6){
+            finish();
+            Intent my_intent=new Intent(getBaseContext(),Success_gameOver.class);
+            //my_intent.putExtra("caption","You Win!");
+            startActivity(my_intent);
+
+        }
+
+        if(GlobalVariables.gameOver==true){
+
+            finish();
+
+            Intent my_intent=new Intent(getBaseContext(),Died_gameOver.class);
+            //my_intent.putExtra("caption","Game Over");
+            startActivity(my_intent);
+
+        }
+
+
     }
 
     //randomize activity
     public void randomizeMinigame(View view){
+
 
     }
 
@@ -36,4 +68,5 @@ public class Map extends AppCompatActivity {
         Intent my_intent=new Intent(getBaseContext(),Wires_miniGame.class);
         startActivity(my_intent);
     }
+
 }
