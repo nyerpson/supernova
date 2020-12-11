@@ -14,6 +14,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -65,17 +66,12 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memory_mini_game);
 
-        /* // get extras bundles for things like the section title
+        // get extras bundles for things like the section title
         Bundle extras = getIntent().getExtras();
         if(extras!=null) {
-            hintImage = findViewById(R.id.hintImage);
-            hintImage.setImageResource(extras.getInt("image"));
-            hintDesc = findViewById(R.id.hintDesc);
-            hintDesc.setText(extras.getString("text"));
-            bottomButton = findViewById(R.id.buttonHintBack);
-            bottomButton.setText(extras.getString("bottomButton"));
+            TextView sectionTitle = findViewById(R.id.sectionTitle);
+            sectionTitle.setText(extras.getString("sectionTitle"));
         }
-         */
 
         // Design Elements
         b1 = findViewById(R.id.b1);
