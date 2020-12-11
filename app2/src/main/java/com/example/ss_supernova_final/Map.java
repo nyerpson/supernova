@@ -17,7 +17,7 @@ public class Map extends AppCompatActivity {
         setContentView(R.layout.activity_map);
     }
 
-    //randomize activity
+    // Randomize activity
     public void randomizeMinigame(View view){
         Random rand = new Random();
         /* // Method 1
@@ -52,24 +52,24 @@ public class Map extends AppCompatActivity {
         else { goToMonster(view); }            // if n = 9
     }
 
-    //PLACEHOLDER - go to asteroid game
+    // Go to asteroid game
     public void goToAsteroid(View view){
         Intent my_intent=new Intent(getBaseContext(),Asteroid_miniGame.class);
         startActivity(my_intent);
     }
-    //PLACEHOLDER - go to memory game
+    // Go to memory game
     public void goToMemory(View view){
         Button b = (Button)view;
         Intent my_intent=new Intent(getBaseContext(),Memory_miniGame.class);
         my_intent.putExtra("sectionTitle", b.getText());
         startActivity(my_intent);
     }
-    //PLACEHOLDER - go to wires game
+    // Go to wires game
     public void goToWires(View view){
         Intent my_intent=new Intent(getBaseContext(),Wires_miniGame.class);
         startActivity(my_intent);
     }
-    //PLACEHOLDER - go to monster game
+    // Go to monster game
     public void goToMonster(View view){
         Intent my_intent=new Intent(getBaseContext(),Monster_encounter.class);
         startActivity(my_intent);
