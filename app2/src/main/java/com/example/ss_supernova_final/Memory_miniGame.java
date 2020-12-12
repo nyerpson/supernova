@@ -53,7 +53,6 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
     Paint level3_color;
 
     // Audio
-    private SoundPool soundPool;
     private int sound1;
     private int sound2;
 
@@ -105,14 +104,14 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
                     .build();
             // Ctrl+B on the USAGE variable to go to the AudioAttributes Class and see what the various variables mean
             // The description for each variable is shown ABOVE each declaration in the AudioAttributes class
-            soundPool = new SoundPool.Builder()
+            GlobalVariables.soundPool = new SoundPool.Builder()
                     .setMaxStreams(6)
                     .setAudioAttributes(audioAttributes)
                     .build();
             // MaxStreams refers to how many sound clips can be played at once (6 in this case)
         }
         else {
-            soundPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 0);
+            GlobalVariables.soundPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 0);
             // maxStreams refers to how many sound clips are going to be loaded into the soundPool (6 in this case)
             // STREAM_MUSIC means the audio will be played through any connected devices, and srcQuality is fine at 0
             // Technically, this doesn't have to be here because we ARE using a higher SDK than Lollipop, but ¯\_(ツ)_/¯
@@ -132,9 +131,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         new CountDownTimer(40000, 1000) {
 
             public void onTick(long millisUntilFinished) {
-
                 TextView mTextField =findViewById(R.id.timer);
-
                 mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
                 //here you can have your logic to set text to edittext
             }
@@ -368,7 +365,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        soundPool.release();
-        soundPool = null;
+        GlobalVariables.soundPool.release();
+        GlobalVariables.soundPool = null;
     }
 }

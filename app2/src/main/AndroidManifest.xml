@@ -13,7 +13,7 @@
             android:name=".Success_gameOver"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".Died_gameOver"
+        <activity android:name=".EndingActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
         <activity android:name=".Monster_encounter"
