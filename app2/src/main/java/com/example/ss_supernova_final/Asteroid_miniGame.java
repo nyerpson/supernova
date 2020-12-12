@@ -15,15 +15,18 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Asteroid_miniGame extends AppCompatActivity implements SensorEventListener, SurfaceHolder.Callback{
 
+    boolean lose;
     Paint white_text;
     Bitmap asteroid;
     Bitmap player;
@@ -60,12 +63,26 @@ public class Asteroid_miniGame extends AppCompatActivity implements SensorEventL
 
         my_animator=new Animator(this);
         my_animator.start();
+
+        new CountDownTimer(20000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+
+                TextView mTextField = findViewById(R.id.timer);
+
+                mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+            }
+
+            //winstate
+            public void onFinish() {
+                GlobalVariables.winState+=1;
+                finish();
+
+            }
+
+        }.start();
+
     }
-
-
-
-
-
 
 
     @Override
@@ -78,7 +95,6 @@ public class Asteroid_miniGame extends AppCompatActivity implements SensorEventL
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
-
 
     int asteroid_x_position=1000;
     int asteroid_y_position=600;
@@ -114,18 +130,23 @@ public class Asteroid_miniGame extends AppCompatActivity implements SensorEventL
         //FAIL -- GO TO MONSTER ENCOUNTER
         if(Math.abs(player_x_position-asteroid_x_position)<85 && Math.abs(player_y_position-asteroid_y_position)<120 ) {
             //go to monster;
+
+            asteroid_x_position=width+200;
+
+
+            finish();
             Intent my_intent=new Intent(getBaseContext(),Monster_encounter.class);
             startActivity(my_intent);
+
         }
+
+
 
     }
 
     public void draw(){
 
         if(holder==null)return;
-
-
-
 
         Canvas c=holder.lockCanvas();
 
@@ -186,10 +207,9 @@ public class Asteroid_miniGame extends AppCompatActivity implements SensorEventL
     public void finishSuccess(View view){
         //return to map
         //NOT FUNCTIONAL RIGHT NOW -- CHANGE TO WORK WITH TIMER
-        if(timer<1){
+        //if(timer<1){
             //add global minigame score +1
-            finish();
+           // finish();
         }
 
     }
-}
