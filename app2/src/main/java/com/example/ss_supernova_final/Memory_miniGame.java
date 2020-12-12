@@ -14,16 +14,12 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.Callback {
@@ -68,7 +64,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         // Extras Bundle
         Bundle extras = getIntent().getExtras();
         if(extras!=null) {
-            TextView sectionTitle = findViewById(R.id.sectionTitle);
+            TextView sectionTitle = findViewById(R.id.sectionTitleMemory);
             sectionTitle.setText(extras.getString("sectionTitle"));
         }
 

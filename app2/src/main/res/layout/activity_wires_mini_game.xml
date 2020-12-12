@@ -45,7 +45,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/SectionTitle"
+            android:id="@+id/sectionTitleWires"
             android:layout_width="189dp"
             android:layout_height="52dp"
             android:layout_marginStart="130dp"
@@ -71,7 +71,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.421"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/SectionTitle"
+            app:layout_constraintTop_toBottomOf="@+id/sectionTitleWires"
             app:srcCompat="@android:drawable/dialog_holo_dark_frame" />
 
         <TextView

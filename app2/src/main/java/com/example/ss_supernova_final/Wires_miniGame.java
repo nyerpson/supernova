@@ -47,6 +47,13 @@ public class Wires_miniGame extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wires_mini_game);
 
+        // Extras Bundle
+        Bundle extras = getIntent().getExtras();
+        if(extras!=null) {
+            TextView sectionTitle = findViewById(R.id.sectionTitleWires);
+            sectionTitle.setText(extras.getString("sectionTitle"));
+        }
+
         mainLayout = (RelativeLayout) findViewById(R.id.main);
         image = (ImageView) findViewById(R.id.image);
         image2 = (ImageView) findViewById(R.id.image2);

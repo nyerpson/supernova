@@ -14,11 +14,10 @@ public class EndingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ending);
 
-        Bundle extras=getIntent().getExtras();
-        if (extras!=null){
-            TextView text = findViewById(R.id.textSay);
+        Bundle extras = getIntent().getExtras();
+        if (extras!=null) {
+            TextView text = findViewById(R.id.endingText);
             text.setText(extras.getString("caption"));
-
         }
     }
 

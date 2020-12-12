@@ -7,7 +7,7 @@
     tools:context=".Memory_miniGame">
 
     <TextView
-        android:id="@+id/sectionTitle"
+        android:id="@+id/sectionTitleMemory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -29,7 +29,7 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sectionTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/sectionTitleMemory" />
 
     <TextView
         android:id="@+id/timer"

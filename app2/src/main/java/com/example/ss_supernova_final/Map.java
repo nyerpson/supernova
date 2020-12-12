@@ -17,6 +17,24 @@ public class Map extends AppCompatActivity {
         setContentView(R.layout.activity_map);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(GlobalVariables.winState==6) {
+            finish();
+            Intent my_intent=new Intent(getBaseContext(),EndingActivity.class);
+            my_intent.putExtra("caption","You Win!");
+            startActivity(my_intent);
+        }
+        if(GlobalVariables.gameOver) {
+            finish();
+            Intent my_intent=new Intent(getBaseContext(),EndingActivity.class);
+            my_intent.putExtra("caption","Game Over");
+            startActivity(my_intent);
+        }
+    }
+
     // Randomize activity
     public void randomizeMinigame(View view){
         Random rand = new Random();
@@ -54,7 +72,9 @@ public class Map extends AppCompatActivity {
 
     // Go to asteroid game
     public void goToAsteroid(View view){
+        Button b = (Button)view;
         Intent my_intent=new Intent(getBaseContext(),Asteroid_miniGame.class);
+        my_intent.putExtra("sectionTitle", b.getText());
         startActivity(my_intent);
     }
     // Go to memory game
@@ -66,7 +86,9 @@ public class Map extends AppCompatActivity {
     }
     // Go to wires game
     public void goToWires(View view){
+        Button b = (Button)view;
         Intent my_intent=new Intent(getBaseContext(),Wires_miniGame.class);
+        my_intent.putExtra("sectionTitle", b.getText());
         startActivity(my_intent);
     }
     // Go to monster game
