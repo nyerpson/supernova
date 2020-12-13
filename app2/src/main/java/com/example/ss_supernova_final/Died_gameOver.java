@@ -14,11 +14,18 @@ public class Died_gameOver extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_died_game_over);
 
+        /*
         Bundle extras = getIntent().getExtras();
         if (extras!=null) {
             TextView text = findViewById(R.id.endingText);
             text.setText(extras.getString("caption"));
         }
+         */
+
+        // BACKGROUND MUSIC
+        // type of music is decided by the victory state in Map
+        LoopMediaPlayer.stopMediaPlayer();
+        LoopMediaPlayer.create(this, GlobalVariables.ambiance);
     }
 
     //return to home screen

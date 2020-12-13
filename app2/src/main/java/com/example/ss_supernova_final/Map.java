@@ -15,22 +15,30 @@ public class Map extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        // BACKGROUND MUSIC
+        GlobalVariables.ambiance = R.raw.maintheme;
+        LoopMediaPlayer.stopMediaPlayer();
+        LoopMediaPlayer.create(this, GlobalVariables.ambiance);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        LoopMediaPlayer.create(this, GlobalVariables.ambiance);
 
         if(GlobalVariables.winState==6) {
             finish();
             Intent my_intent=new Intent(getBaseContext(), Died_gameOver.class);
             my_intent.putExtra("caption","You Win!");
+            GlobalVariables.ambiance = R.raw.victoryfanfare;
             startActivity(my_intent);
         }
         if(GlobalVariables.gameOver) {
             finish();
             Intent my_intent=new Intent(getBaseContext(), Died_gameOver.class);
             my_intent.putExtra("caption","Game Over");
+            GlobalVariables.ambiance = R.raw.defeatdrone;
             startActivity(my_intent);
         }
     }

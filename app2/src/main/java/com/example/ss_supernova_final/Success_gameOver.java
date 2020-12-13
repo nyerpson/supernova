@@ -12,6 +12,11 @@ public class Success_gameOver extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_success_game_over);
+
+        // BACKGROUND MUSIC
+        // type of music is decided by the victory state in Map
+        LoopMediaPlayer.stopMediaPlayer();
+        LoopMediaPlayer.create(this, GlobalVariables.ambiance);
     }
 
     //return to home screen
