@@ -25,6 +25,7 @@ import java.util.Random;
 public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.Callback {
 
     // Game Elements
+    static boolean active = false;
     Button b1;
     Button b2;
     Button b3;
@@ -133,11 +134,25 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
             //losing conditions
             public void onFinish() {
                 //idk if this will crash the program lol
-                finish();
-                Intent my_intent=new Intent(getBaseContext(),Monster_encounter.class);
-                startActivity(my_intent);
+                if(active) {
+                    finish();
+                    Intent my_intent = new Intent(getBaseContext(), Monster_encounter.class);
+                    startActivity(my_intent);
+                }
             }
         }.start();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        active = true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        active = false;
     }
 
     // NOTE: FOR HOW TO STOP CERTAIN SOUNDS WHEN SOMETHING ELSE IS PRESSED, CHECK THE END OF THE VIDEO WITH THE STREAM ID'S

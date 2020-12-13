@@ -32,6 +32,8 @@ import android.widget.Toast;
 
 public class Wires_miniGame extends AppCompatActivity{
 
+    static boolean active = false;
+
     public int image_id;
     private static final String DEBUGTAG = "JWP";
     private ViewGroup mainLayout;
@@ -50,8 +52,8 @@ public class Wires_miniGame extends AppCompatActivity{
         // Extras Bundle
         Bundle extras = getIntent().getExtras();
         if(extras!=null) {
-            TextView sectionTitle = findViewById(R.id.sectionTitleWires);
-            sectionTitle.setText(extras.getString("sectionTitle"));
+            //TextView sectionTitle = findViewById(R.id.sectionTitleWires);
+            //sectionTitle.setText(extras.getString("sectionTitle"));
         }
 
         mainLayout = (RelativeLayout) findViewById(R.id.main);
@@ -64,22 +66,37 @@ public class Wires_miniGame extends AppCompatActivity{
         image3.setOnTouchListener(onTouchListener());
 
 
-        new CountDownTimer(10000, 1000) {
+        new CountDownTimer(15000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 TextView mTextField = findViewById(R.id.timer);
 
-                mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+                mTextField.setText("SECONDS REMAINING: " + millisUntilFinished / 1000);
             }
 
             //lose
             public void onFinish() {
-                finish();
-                Intent my_intent=new Intent(getBaseContext(),Monster_encounter.class);
-                startActivity(my_intent);
+
+                if(active) {
+                    finish();
+                    Intent my_intent = new Intent(getBaseContext(), Monster_encounter.class);
+                    startActivity(my_intent);
+                }
             }
 
         }.start();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        active = true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        active = false;
     }
 
     private OnTouchListener onTouchListener() {

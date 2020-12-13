@@ -19,12 +19,14 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.TextView;
 
 
 public class Monster_encounter extends AppCompatActivity implements SensorEventListener, SurfaceHolder.Callback{
 
     Bitmap pegasus;
 
+    Bitmap background;
     Bitmap cloud;
     Bitmap cloud2;
     Bitmap heart;
@@ -43,13 +45,19 @@ public class Monster_encounter extends AppCompatActivity implements SensorEventL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
+
+
         setContentView(R.layout.activity_monster_encounter);
 
-        pegasus= Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.guy), 200, 200, false);
-        cloud= Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.tentacle), 200, 800, false);
-        cloud2= Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.tentacle), 200, 800, false);
+        pegasus= Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.player), 200, 200, false);
+        cloud= Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.tentaclej), 200, 800, false);
+        cloud2= Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.tentaclej), 200, 800, false);
         monster= Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.face), 300, 300, false);
-        heart= Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.heart), 200, 200, false);
+        heart= Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.heartj), 200, 200, false);
+        background= Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.monsterbg), 1500, 2000, false);
 
 
         scoreText=new Paint();
@@ -76,6 +84,10 @@ public class Monster_encounter extends AppCompatActivity implements SensorEventL
 
             public void onTick(long millisUntilFinished) {
                 timeRemaining = millisUntilFinished / 1000;
+
+                TextView mTextField = findViewById(R.id.timer);
+                mTextField.setText("Time Left: " + millisUntilFinished / 1000);
+
             }
 
             //winstate
@@ -200,8 +212,10 @@ public class Monster_encounter extends AppCompatActivity implements SensorEventL
         update(c.getWidth(),c.getHeight());
 
         //draw all assets
-        c.drawColor(Color.rgb(117,210,249));
+        c.drawColor(Color.rgb(128,128,128));
 
+
+        c.drawBitmap(background, 0,0, null);
 
         if(GlobalVariables.playerHealth==3){
             c.drawBitmap(heart, 250,1450, null);
@@ -215,14 +229,14 @@ public class Monster_encounter extends AppCompatActivity implements SensorEventL
         }
 
 
-        c.drawBitmap(monster, 300,100, null);
+        //c.drawBitmap(monster, 300,100, null);
         c.drawBitmap(cloud, cloud_x_position,cloud_y_position, null);
         c.drawBitmap(cloud2, cloud2_x_position,cloud2_y_position, null);
         c.drawBitmap(pegasus, pegasus_x_position,1200, null);
         //c.drawText("Clouds reduce hearts.", +530, +1600, styleText);
-        c.drawText("Time Left: "+ timeRemaining, +220, +200, scoreText);
+        //c.drawText("Time Left: "+ timeRemaining, +220, +200, scoreText);
 
-        c.drawText("Monster Encounter!", 300, 60, styleText);
+        //c.drawText("Monster Encounter!", 300, 60, styleText);
 
         holder.unlockCanvasAndPost(c);
     }

@@ -26,6 +26,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Asteroid_miniGame extends AppCompatActivity implements SensorEventListener, SurfaceHolder.Callback{
 
+    static boolean active = false;
     boolean lose;
     Paint white_text;
     Bitmap asteroid;
@@ -70,18 +71,33 @@ public class Asteroid_miniGame extends AppCompatActivity implements SensorEventL
 
                 TextView mTextField = findViewById(R.id.timer);
 
-                mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+                mTextField.setText("SECONDS REMAINING: " + millisUntilFinished / 1000);
             }
 
             //winstate
             public void onFinish() {
-                GlobalVariables.winState+=1;
-                finish();
+
+                if(active){
+                    GlobalVariables.winState+=1;
+                    finish();
+                }
+
 
             }
 
         }.start();
 
+    }
+
+    public void onStart() {
+        super.onStart();
+        active = true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        active = false;
     }
 
 

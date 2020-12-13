@@ -16,8 +16,8 @@ public class Died_gameOver extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras!=null) {
-            TextView text = findViewById(R.id.endingText);
-            text.setText(extras.getString("caption"));
+            //TextView text = findViewById(R.id.endingText);
+            //text.setText(extras.getString("caption"));
         }
     }
 

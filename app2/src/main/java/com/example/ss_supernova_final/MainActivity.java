@@ -9,6 +9,16 @@ import android.view.View;
 public class MainActivity extends AppCompatActivity {
 
     @Override
+
+    public void onResume() {
+        super.onResume();
+
+        GlobalVariables.playerHealth = 3;
+        GlobalVariables.winState = 0;
+        GlobalVariables.gameOver = false;
+
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
