@@ -4,4 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Died_gameOver"/>
+    android:background="@drawable/fail"
+    tools:context=".Died_gameOver">
+
+    <Button
+        android:id="@+id/button16"
+        android:layout_width="242dp"
+        android:layout_height="77dp"
+        android:layout_marginTop="336dp"
+        android:background="#00FFFFFF"
+        android:onClick="returnToStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.55"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
