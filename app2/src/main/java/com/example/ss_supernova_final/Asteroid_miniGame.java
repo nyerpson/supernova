@@ -45,7 +45,7 @@ public class Asteroid_miniGame extends AppCompatActivity implements SensorEventL
         white_text.setTextSize(100);
 
         asteroid= Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.asteroid),230,230,false);
-        player= Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.player),85,120,false);
+        player= Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.player),100,120,false);
 
         SensorManager manager=(SensorManager)getSystemService(Context.SENSOR_SERVICE);
         Sensor accelerometer=manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
