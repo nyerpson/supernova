@@ -40,6 +40,8 @@ public class LoopMediaPlayer {
         createNextMediaPlayer();
     }
 
+
+
     private void createNextMediaPlayer() {
         mNextPlayer = MediaPlayer.create(mContext, mResId);
         mCurrentPlayer.setNextMediaPlayer(mNextPlayer);

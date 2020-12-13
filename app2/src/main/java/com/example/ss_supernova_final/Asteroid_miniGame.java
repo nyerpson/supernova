@@ -231,13 +231,22 @@ public class Asteroid_miniGame extends AppCompatActivity implements SensorEventL
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        LoopMediaPlayer.stopMediaPlayer();
+    }
+
+
+    @Override
     public void onDestroy(){
 
+        super.onDestroy();
         my_animator.finish();
         SensorManager manager=(SensorManager) getSystemService(Context.SENSOR_SERVICE);
         manager.unregisterListener(this,manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER));
+        LoopMediaPlayer.stopMediaPlayer();
 
-        super.onDestroy();
+
     }
     /*
     public void fail(View view){

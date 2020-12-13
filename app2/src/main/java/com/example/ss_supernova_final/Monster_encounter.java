@@ -48,8 +48,6 @@ public class Monster_encounter extends AppCompatActivity implements SensorEventL
 
 
 
-
-
         setContentView(R.layout.activity_monster_encounter);
 
         pegasus= Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.player), 200, 200, false);
@@ -268,10 +266,20 @@ public class Monster_encounter extends AppCompatActivity implements SensorEventL
     @Override
     public void onDestroy(){
 
+        super.onDestroy();
+
+        LoopMediaPlayer.stopMediaPlayer();
         my_animator.finish();
         SensorManager manager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         manager.unregisterListener(this,manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER));
-        super.onDestroy();
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LoopMediaPlayer.stopMediaPlayer();
 
     }
 

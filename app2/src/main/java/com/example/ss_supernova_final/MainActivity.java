@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         GlobalVariables.playerHealth = 3;
         GlobalVariables.winState = 0;
         GlobalVariables.gameOver = false;
-
+        LoopMediaPlayer.create(this, GlobalVariables.ambiance);
     }
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +37,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        LoopMediaPlayer.create(this, GlobalVariables.ambiance);
-    }
-    @Override
     protected void onDestroy() {
         super.onDestroy();
+        LoopMediaPlayer.stopMediaPlayer();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
         LoopMediaPlayer.stopMediaPlayer();
     }
 

@@ -2,14 +2,20 @@ package com.example.ss_supernova_final;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.Random;
 
 public class Map extends AppCompatActivity {
+
+    int tasks = GlobalVariables.winState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,18 +24,30 @@ public class Map extends AppCompatActivity {
 
         // BACKGROUND MUSIC
         GlobalVariables.ambiance = R.raw.maintheme;
-        LoopMediaPlayer.stopMediaPlayer();
+
         LoopMediaPlayer.create(this, GlobalVariables.ambiance);
+
+        int tasks = GlobalVariables.winState;
+
+        TextView mTextField = findViewById(R.id.statusBar);
+        mTextField.setText("TASKS COMPETED: "+ tasks);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+        GlobalVariables.ambiance = R.raw.maintheme;
         LoopMediaPlayer.create(this, GlobalVariables.ambiance);
+
+        int tasks = GlobalVariables.winState;
+
+        TextView mTextField = findViewById(R.id.statusBar);
+        mTextField.setText("TASKS COMPETED: "+ tasks);
 
         if(GlobalVariables.winState==6) {
             finish();
-            Intent my_intent=new Intent(getBaseContext(), Died_gameOver.class);
+            Intent my_intent=new Intent(getBaseContext(), Success_gameOver.class);
             my_intent.putExtra("caption","You Win!");
             GlobalVariables.ambiance = R.raw.victoryfanfare;
             startActivity(my_intent);
@@ -73,7 +91,7 @@ public class Map extends AppCompatActivity {
                 // Randoms include 0 and exclude the bound
         int n = rand.nextInt(10);
         if(n < 3) { goToAsteroid(view); }        // if n = 0, 1, 2
-        else if(n < 6) { goToMemory(view); }     // if n = 3, 4, 5
+        else if(n < 4) { goToMemory(view); }     // if n = 3, 4, 5
         else if(n < 9) { goToWires(view); }      // if n = 6, 7, 8
         else { goToMonster(view); }            // if n = 9
     }
@@ -104,4 +122,20 @@ public class Map extends AppCompatActivity {
         Intent my_intent=new Intent(getBaseContext(),Monster_encounter.class);
         startActivity(my_intent);
     }
+
+    @Override
+    public void onDestroy(){
+
+        super.onDestroy();
+        LoopMediaPlayer.stopMediaPlayer();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LoopMediaPlayer.stopMediaPlayer();
+
+    }
+
 }

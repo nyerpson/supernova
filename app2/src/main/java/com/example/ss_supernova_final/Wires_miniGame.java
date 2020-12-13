@@ -50,6 +50,8 @@ public class Wires_miniGame extends AppCompatActivity{
 
     private int switchup;
     private int switchdown;
+    private int soundThing;
+    private int soundThing2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,20 +80,33 @@ public class Wires_miniGame extends AppCompatActivity{
                     .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .build();
+            // Ctrl+B on the USAGE variable to go to the AudioAttributes Class and see what the various variables mean
+            // The description for each variable is shown ABOVE each declaration in the AudioAttributes class
             GlobalVariables.soundPool = new SoundPool.Builder()
                     .setMaxStreams(6)
                     .setAudioAttributes(audioAttributes)
                     .build();
+            // MaxStreams refers to how many sound clips can be played at once (6 in this case)
         }
-        else { GlobalVariables.soundPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 0); }
+        else {
+            GlobalVariables.soundPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 0);
+            // maxStreams refers to how many sound clips are going to be loaded into the soundPool (6 in this case)
+            // STREAM_MUSIC means the audio will be played through any connected devices, and srcQuality is fine at 0
+            // Technically, this doesn't have to be here because we ARE using a higher SDK than Lollipop, but ¯\_(ツ)_/¯
+        }
+
+
+        soundThing = GlobalVariables.soundPool.load(this, R.raw.beepc3, 1);
+        soundThing2 = GlobalVariables.soundPool.load(this, R.raw.boop4, 1);
+
         switchup = GlobalVariables.soundPool.load(this, R.raw.switchup, 1);
         switchdown = GlobalVariables.soundPool.load(this, R.raw.switchdown, 1);
 
         // TO USE: paste this line with the correct sound file wherever you would like the sound to play (see the Memory Game's commented version for more information on the parameters, such as looping or speed)
-        //GlobalVariables.soundPool.play(NAMEOFSOUNDFILE, 1, 1, 0, 0, 1);
+
 
         // BACKGROUND MUSIC
-        GlobalVariables.ambiance = R.raw.minigame1;
+        GlobalVariables.ambiance = R.raw.minigame2;
         LoopMediaPlayer.stopMediaPlayer();
         LoopMediaPlayer.create(this, GlobalVariables.ambiance);
 
@@ -129,6 +144,21 @@ public class Wires_miniGame extends AppCompatActivity{
         active = false;
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LoopMediaPlayer.stopMediaPlayer();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+
+
+        LoopMediaPlayer.stopMediaPlayer();
+        super.onDestroy();
+    }
+
     private OnTouchListener onTouchListener() {
         return new OnTouchListener() {
 
@@ -155,6 +185,7 @@ public class Wires_miniGame extends AppCompatActivity{
                         xDelta = x - lParams.leftMargin;
                         yDelta = y - lParams.topMargin;
 
+                        GlobalVariables.soundPool.play(soundThing, 1, 1, 0, 0, 1);
 
                         break;
 
@@ -163,12 +194,17 @@ public class Wires_miniGame extends AppCompatActivity{
 
                         if(y>1000&&view==image){
 
+                            GlobalVariables.soundPool.play(soundThing2, 1, 1, 0, 0, 1);
                             return false;
+
 
                         }else if(y>1000&&view==image2){
 
+                            GlobalVariables.soundPool.play(soundThing2, 1, 1, 0, 0, 1);
 
                         }else if (y>1000&&view==image3) {
+
+                            GlobalVariables.soundPool.play(soundThing2, 1, 1, 0, 0, 1);
                             //Toast.makeText(Wires_miniGame.this,
                                     //"You moved battery 3 correctly!", Toast.LENGTH_SHORT)
                                     //.show();
@@ -198,6 +234,7 @@ public class Wires_miniGame extends AppCompatActivity{
             }
         };
     }
+
 
 
 }

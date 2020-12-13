@@ -152,12 +152,14 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
 
     @Override
     public void onStart() {
+        active = true;
         super.onStart();
         active = true;
     }
 
     @Override
     public void onStop() {
+        active = false;
         super.onStop();
         active = false;
     }
@@ -380,8 +382,16 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
     }
     @Override
     protected void onDestroy() {
+
+
+        LoopMediaPlayer.stopMediaPlayer();
         super.onDestroy();
-        GlobalVariables.soundPool.release();
-        GlobalVariables.soundPool = null;
+    }
+
+    @Override
+    protected void onPause() {
+
+        LoopMediaPlayer.stopMediaPlayer();
+        super.onPause();
     }
 }
