@@ -125,23 +125,18 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         flashSequence();
 
         new CountDownTimer(40000, 1000) {
-
             public void onTick(long millisUntilFinished) {
                 TextView mTextField =findViewById(R.id.timer);
-                mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+                mTextField.setText("Time Remaining: " + millisUntilFinished / 1000);
                 //here you can have your logic to set text to edittext
             }
-
             //losing conditions
             public void onFinish() {
-
                 //idk if this will crash the program lol
                 finish();
                 Intent my_intent=new Intent(getBaseContext(),Monster_encounter.class);
                 startActivity(my_intent);
-
             }
-
         }.start();
     }
 
@@ -232,7 +227,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
                 if(tickCount==0) { tickCount++; }
                 else if(tickCount>0 && tickCount<=gameSequence.length) {
                     gameSequence[tickCount-1].setText(""+tickCount);
-                    gameSequence[tickCount-1].setBackgroundTintList(ContextCompat.getColorStateList(Memory_miniGame.this, R.color.colorPrimary));
+                    gameSequence[tickCount-1].setBackgroundTintList(ContextCompat.getColorStateList(Memory_miniGame.this, R.color.colorMemFlash));
                     tickCount++;
                 }
                 else { tickCount++; }
@@ -252,7 +247,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         for(int i = 0; i < buttonList.length; i++) {
             if(buttonIdList[i]==view.getId()) {                                                                                 // 1. Iterate through list of button Ids to get which one was pressed
                 playerSequence[clickCount] = buttonList[i];                                                                     // 2. Add pressed button to player sequence array
-                buttonList[i].setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimaryDark));   // DEBUG: Feedback that the right button was pressed
+                buttonList[i].setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorMemSeq));   // DEBUG: Feedback that the right button was pressed
                 clickCount++;                                                                                                   // 3. Increment click count for adding new array elements
             }
         }
