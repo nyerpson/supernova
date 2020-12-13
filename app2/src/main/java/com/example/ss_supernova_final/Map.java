@@ -23,13 +23,13 @@ public class Map extends AppCompatActivity {
 
         if(GlobalVariables.winState==6) {
             finish();
-            Intent my_intent=new Intent(getBaseContext(),EndingActivity.class);
+            Intent my_intent=new Intent(getBaseContext(), Died_gameOver.class);
             my_intent.putExtra("caption","You Win!");
             startActivity(my_intent);
         }
         if(GlobalVariables.gameOver) {
             finish();
-            Intent my_intent=new Intent(getBaseContext(),EndingActivity.class);
+            Intent my_intent=new Intent(getBaseContext(), Died_gameOver.class);
             my_intent.putExtra("caption","Game Over");
             startActivity(my_intent);
         }

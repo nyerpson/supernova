@@ -5,20 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
-public class EndingActivity extends AppCompatActivity {
+public class Success_gameOver extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_died_game_over);
-
-        Bundle extras = getIntent().getExtras();
-        if (extras!=null) {
-            TextView text = findViewById(R.id.endingText);
-            text.setText(extras.getString("caption"));
-        }
+        setContentView(R.layout.activity_success_game_over);
     }
 
     //return to home screen
