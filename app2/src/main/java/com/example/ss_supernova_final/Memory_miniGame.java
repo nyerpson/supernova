@@ -4,33 +4,25 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.Callback {
-
-    /*
-    public void setMiniGameBundles(String gameId, int imageId, String titleText) {
-        Intent intent = new Intent(getBaseContext(), gameId.class);
-        //intent.putExtra("image", imageId);
-        intent.putExtra("title", titleText);
-        // Any other extras to send (how much health is remaining, if that's tracked in Main/Map? you can make that a global instead too)
-        startActivity(intent);
-    }
-     */
 
     // Game Elements
     Button b1;
@@ -56,6 +48,10 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
     Paint level2_color;
     Paint level3_color;
 
+    // Audio
+    private int sound1;
+    private int sound2;
+
     // Other
     Button bottomButton;
     SurfaceHolder holder = null;
@@ -65,17 +61,12 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memory_mini_game);
 
-        /* // get extras bundles for things like the section title
+        // Extras Bundle
         Bundle extras = getIntent().getExtras();
         if(extras!=null) {
-            hintImage = findViewById(R.id.hintImage);
-            hintImage.setImageResource(extras.getInt("image"));
-            hintDesc = findViewById(R.id.hintDesc);
-            hintDesc.setText(extras.getString("text"));
-            bottomButton = findViewById(R.id.buttonHintBack);
-            bottomButton.setText(extras.getString("bottomButton"));
+            TextView sectionTitle = findViewById(R.id.sectionTitleMemory);
+            sectionTitle.setText(extras.getString("sectionTitle"));
         }
-         */
 
         // Design Elements
         b1 = findViewById(R.id.b1);
@@ -101,15 +92,67 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         SurfaceView surface = findViewById(R.id.surfaceView);
         surface.getHolder().addCallback(this);
 
-        draw();
+        // Audio Elements
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build();
+            // Ctrl+B on the USAGE variable to go to the AudioAttributes Class and see what the various variables mean
+            // The description for each variable is shown ABOVE each declaration in the AudioAttributes class
+            GlobalVariables.soundPool = new SoundPool.Builder()
+                    .setMaxStreams(6)
+                    .setAudioAttributes(audioAttributes)
+                    .build();
+            // MaxStreams refers to how many sound clips can be played at once (6 in this case)
+        }
+        else {
+            GlobalVariables.soundPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 0);
+            // maxStreams refers to how many sound clips are going to be loaded into the soundPool (6 in this case)
+            // STREAM_MUSIC means the audio will be played through any connected devices, and srcQuality is fine at 0
+            // Technically, this doesn't have to be here because we ARE using a higher SDK than Lollipop, but ¯\_(ツ)_/¯
+        }
+        //sound1 = soundPool.load(this, R.raw.sound1, 1);
+        //sound2 = soundPool.load(this, R.raw.sound2, 1);
 
         // Initialize Game
+        draw();
         level = 1;
         levelComplete = false;
         gameComplete = false;
         clickCount = 0;
         generateSequence(level);
         flashSequence();
+
+        new CountDownTimer(40000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                TextView mTextField =findViewById(R.id.timer);
+                mTextField.setText("Time Remaining: " + millisUntilFinished / 1000);
+                //here you can have your logic to set text to edittext
+            }
+            //losing conditions
+            public void onFinish() {
+                //idk if this will crash the program lol
+                finish();
+                Intent my_intent=new Intent(getBaseContext(),Monster_encounter.class);
+                startActivity(my_intent);
+            }
+        }.start();
+    }
+
+    // NOTE: FOR HOW TO STOP CERTAIN SOUNDS WHEN SOMETHING ELSE IS PRESSED, CHECK THE END OF THE VIDEO WITH THE STREAM ID'S
+
+    /*
+    public void playSound(View v) {     // view in this example refers to which button was pressed
+        switch(v.getId()) {
+            case R.id.button_sound1:
+                soundPool.play(sound1, 1, 1, 0, 0, 1);
+                // the volume floats can be between 0.0 and 1.0 to adjust volume on either side
+                // priority determines which sounds stop when maxStreams is hit; with priority 1 on the files, you can make everything the same priority by passing 0
+                // loop can be 0 for no looping, greater than 0 for multiple loops (ex. 2 will play the file three times, one original and 2 looped), and -1 plays it indefinitely
+                // rate is the speed at which is plays the file, a float between 1.0 and 2.0, where 1 is normal speed
+                break;
+        }
     }
 
     /* Steps
@@ -184,7 +227,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
                 if(tickCount==0) { tickCount++; }
                 else if(tickCount>0 && tickCount<=gameSequence.length) {
                     gameSequence[tickCount-1].setText(""+tickCount);
-                    gameSequence[tickCount-1].setBackgroundTintList(ContextCompat.getColorStateList(Memory_miniGame.this, R.color.colorPrimary));
+                    gameSequence[tickCount-1].setBackgroundTintList(ContextCompat.getColorStateList(Memory_miniGame.this, R.color.colorMemFlash));
                     tickCount++;
                 }
                 else { tickCount++; }
@@ -204,7 +247,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         for(int i = 0; i < buttonList.length; i++) {
             if(buttonIdList[i]==view.getId()) {                                                                                 // 1. Iterate through list of button Ids to get which one was pressed
                 playerSequence[clickCount] = buttonList[i];                                                                     // 2. Add pressed button to player sequence array
-                buttonList[i].setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorPrimaryDark));   // DEBUG: Feedback that the right button was pressed
+                buttonList[i].setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorMemSeq));   // DEBUG: Feedback that the right button was pressed
                 clickCount++;                                                                                                   // 3. Increment click count for adding new array elements
             }
         }
@@ -241,13 +284,18 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
                 draw();
                 gameComplete = true;
                 bottomButton.setText("RETURN TO MAP");
-                buttonFunctions(3);     // disable click-ability
+                buttonFunctions(3);
+
+                GlobalVariables.winState += 1;
+                finish();
+                // disable click-ability
                 // stop timer, victory feedback (change button color/image?), etc.
+                // ADD OTHER FEATURES, SUCH AS MODIFYING GLOBAL VARIABLES
             }
         }
     }
 
-    //flash sequence again; if game complete, return to map
+    // Flash sequence again; if game complete, return to map
     public void onBottomClick(View view){
         if(!gameComplete) { flashSequence(); }
         else { finish(); }
@@ -290,6 +338,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         c.drawCircle(374, 85, 30, level1_color);
         c.drawCircle(487, 85, 30, level2_color);
         c.drawCircle(600, 85, 30, level3_color);
+
         holder.unlockCanvasAndPost(c);
     }
 
@@ -299,11 +348,15 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
         draw();
     }
     @Override
-    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-        holder = surfaceHolder;
-    }
+    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) { holder = surfaceHolder; }
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
         holder = null;
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        GlobalVariables.soundPool.release();
+        GlobalVariables.soundPool = null;
     }
 }
