@@ -50,8 +50,9 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
     Paint level3_color;
 
     // Audio
-    private int sound1;
-    private int sound2;
+    private int wrongkey;
+    private int gamekey;
+    private int playerkey;
 
     // Other
     Button bottomButton;
@@ -113,8 +114,14 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
             // STREAM_MUSIC means the audio will be played through any connected devices, and srcQuality is fine at 0
             // Technically, this doesn't have to be here because we ARE using a higher SDK than Lollipop, but ¯\_(ツ)_/¯
         }
-        //sound1 = soundPool.load(this, R.raw.sound1, 1);
-        //sound2 = soundPool.load(this, R.raw.sound2, 1);
+        wrongkey = GlobalVariables.soundPool.load(this, R.raw.boop1c, 1);
+        gamekey = GlobalVariables.soundPool.load(this, R.raw.boop2g, 1);
+        playerkey = GlobalVariables.soundPool.load(this, R.raw.boop3c, 1);
+
+        // BACKGROUND MUSIC
+        GlobalVariables.ambiance = R.raw.minigame2;
+        LoopMediaPlayer.stopMediaPlayer();
+        LoopMediaPlayer.create(this, GlobalVariables.ambiance);
 
         // Initialize Game
         draw();
@@ -243,6 +250,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
                 else if(tickCount>0 && tickCount<=gameSequence.length) {
                     gameSequence[tickCount-1].setText(""+tickCount);
                     gameSequence[tickCount-1].setBackgroundTintList(ContextCompat.getColorStateList(Memory_miniGame.this, R.color.colorMemFlash));
+                    GlobalVariables.soundPool.play(gamekey, 1, 1, 0, 0, 1);
                     tickCount++;
                 }
                 else { tickCount++; }
@@ -264,6 +272,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
                 playerSequence[clickCount] = buttonList[i];                                                                     // 2. Add pressed button to player sequence array
                 buttonList[i].setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorMemSeq));   // DEBUG: Feedback that the right button was pressed
                 clickCount++;                                                                                                   // 3. Increment click count for adding new array elements
+                GlobalVariables.soundPool.play(playerkey, 1, 1, 0, 0, 1);               // 4. Sound feedback
             }
         }
         // SECOND: CHECK THAT BOTH ARRAYS ARE THE SAME
@@ -271,6 +280,7 @@ public class Memory_miniGame extends AppCompatActivity implements SurfaceHolder.
             if(playerSequence[i]!=gameSequence[i]) {  // If the sequences differ:
                 buttonFunctions(1);             // 1. Reset all button tints and text
                 buttonFunctions(4);             // 2. Reset the player sequence and clickCount
+                GlobalVariables.soundPool.play(wrongkey, 1, 1, 0, 0, 1);    // 3. Sound feedback
             }
         }
         // THIRD: IF CLICK COUNT HAS REACHED THE ARRAY LENGTH, IT MEANS THE SEQUENCE WAS COMPLETED

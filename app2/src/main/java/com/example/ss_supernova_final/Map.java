@@ -6,38 +6,39 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import java.util.Random;
 
 public class Map extends AppCompatActivity {
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        // BACKGROUND MUSIC
+        GlobalVariables.ambiance = R.raw.maintheme;
+        LoopMediaPlayer.stopMediaPlayer();
+        LoopMediaPlayer.create(this, GlobalVariables.ambiance);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        LoopMediaPlayer.create(this, GlobalVariables.ambiance);
 
-        int gamesDone = GlobalVariables.winState;
-        TextView mTextField = findViewById(R.id.statusBar);
-        mTextField.setText("TASKS COMPLETED: " + gamesDone);
-
-        if(GlobalVariables.winState==1) {
+        if(GlobalVariables.winState==6) {
             finish();
-            Intent my_intent=new Intent(getBaseContext(), Success_gameOver.class);
-            //my_intent.putExtra("caption","You Win!");
+            Intent my_intent=new Intent(getBaseContext(), Died_gameOver.class);
+            my_intent.putExtra("caption","You Win!");
+            GlobalVariables.ambiance = R.raw.victoryfanfare;
             startActivity(my_intent);
         }
         if(GlobalVariables.gameOver) {
             finish();
             Intent my_intent=new Intent(getBaseContext(), Died_gameOver.class);
-            //my_intent.putExtra("caption","Game Over");
+            my_intent.putExtra("caption","Game Over");
+            GlobalVariables.ambiance = R.raw.defeatdrone;
             startActivity(my_intent);
         }
     }

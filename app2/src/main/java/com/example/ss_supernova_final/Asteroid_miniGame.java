@@ -14,6 +14,10 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.SurfaceHolder;
@@ -37,6 +41,8 @@ public class Asteroid_miniGame extends AppCompatActivity implements SensorEventL
 
     float acc_x=0;
     float acc_y=0;
+
+    private int soundFile;
 
 
     @Override
@@ -64,6 +70,28 @@ public class Asteroid_miniGame extends AppCompatActivity implements SensorEventL
 
         my_animator=new Animator(this);
         my_animator.start();
+
+        // Audio Elements
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build();
+            GlobalVariables.soundPool = new SoundPool.Builder()
+                    .setMaxStreams(6)
+                    .setAudioAttributes(audioAttributes)
+                    .build();
+        }
+        else { GlobalVariables.soundPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 0); }
+
+        soundFile = GlobalVariables.soundPool.load(this, R.raw.blaat, 1);
+        // TO USE: paste this line with the correct sound file wherever you would like the sound to play (see the Memory Game's commented version for more information on the parameters, such as looping or speed)
+        //GlobalVariables.soundPool.play(NAMEOFSOUNDFILE, 1, 1, 0, 0, 1);
+
+        // BACKGROUND MUSIC
+        GlobalVariables.ambiance = R.raw.minigame3;
+        LoopMediaPlayer.stopMediaPlayer();
+        LoopMediaPlayer.create(this, GlobalVariables.ambiance);
 
         new CountDownTimer(20000, 1000) {
 

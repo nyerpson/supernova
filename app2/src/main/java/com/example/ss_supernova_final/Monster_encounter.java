@@ -80,6 +80,11 @@ public class Monster_encounter extends AppCompatActivity implements SensorEventL
         my_animator=new Animator2(this);
         my_animator.start();
 
+        // BACKGROUND MUSIC
+        GlobalVariables.ambiance = R.raw.monstertheme_alarm;
+        LoopMediaPlayer.stopMediaPlayer();
+        LoopMediaPlayer.create(this, GlobalVariables.ambiance);
+
         new CountDownTimer(20000, 1000) {
 
             public void onTick(long millisUntilFinished) {

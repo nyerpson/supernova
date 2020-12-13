@@ -9,4 +9,5 @@ public class GlobalVariables {
     public static boolean gameOver = false;
 
     public static SoundPool soundPool;
+    public static int ambiance;
 }
